@@ -175,10 +175,11 @@ Getting grokking to work reliably took several failed attempts. Here's what we l
 grokking/
 ├── run.py                      # Complete pipeline: training + Fourier analysis + 7 figures
 ├── improved_analysis.py        # Enhanced analysis with precise phase metrics (light mode)
-├── improved_analysis_dark.py   # Enhanced analysis with dark mode styling
 ├── submit.sh                   # SLURM batch script for Northeastern Explorer cluster
 ├── requirements.txt            # torch, numpy, matplotlib
 ├── README.md
+├── grokking_4381432.err        # SLURM job error log
+├── grokking_4381432.out        # SLURM job output log
 └── outputs/
     ├── model.pt                                # Trained weights
     ├── config.json                             # Hyperparameters
@@ -190,8 +191,7 @@ grokking/
     ├── 05_fourier_circles.png                  # Learned vs ideal Fourier circles + correlation
     ├── 06_algorithm_summary.png                # Full algorithm diagram with statistics
     ├── 07_logit_fourier_analysis.png           # Logit decomposition into Fourier modes
-    ├── improved_grokking_analysis.png          # 4-panel enhanced analysis (light mode)
-    └── improved_grokking_analysis_dark.png     # 4-panel enhanced analysis (dark mode)
+    └── improved_grokking_analysis.png          # 4-panel enhanced analysis (light mode)
 ```
 
 ## Output Figures
