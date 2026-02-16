@@ -1,0 +1,52 @@
+=== f(a,b) = (a + b) mod 113 ===
+1L d=128 4H MLP=512 | WD=1.0 LR=0.001 | cuda
+
+Train: 3830  Test: 8939
+
+Params: 227,328
+
+     0 | 4.8935 | 4.8123 | 0.9% | 0.9%
+   500 | 0.0078 | 5.6824 | 100.0% | 24.9%
+  1000 | 0.0271 | 5.0617 | 100.0% | 26.5%
+  1500 | 0.0782 | 4.6448 | 100.0% | 26.9%
+  2000 | 0.0512 | 3.4740 | 100.0% | 31.5%
+  2325 | 0.0814 | 1.5820 | 100.0% | 56.9% ^
+  2350 | 0.0608 | 1.4756 | 100.0% | 60.5% ^
+  2375 | 0.0545 | 1.4010 | 100.0% | 63.2% ^
+  2400 | 0.0497 | 1.3100 | 100.0% | 66.6% ^
+  2425 | 0.0444 | 1.1988 | 100.0% | 71.1% ^
+  2475 | 0.1878 | 0.9224 | 99.9% | 81.7% ^
+  2500 | 0.0934 | 0.6306 | 100.0% | 91.6% ^
+  2525 | 0.0714 | 0.5208 | 100.0% | 94.7% ^
+  2550 | 0.0610 | 0.4502 | 100.0% | 96.6% << GROKKING!
+  3000 | 0.0297 | 0.0515 | 100.0% | 100.0%
+  3500 | 0.0214 | 0.0287 | 100.0% | 100.0%
+  4000 | 0.0148 | 0.0181 | 100.0% | 100.0%
+  4500 | 0.0092 | 0.0110 | 100.0% | 100.0%
+
+Perfect at 4625
+
+Done in 25s | Train:100% Test:100%
+Memorized:125 Grokked:2550 Gap:2425
+
+=== Generating figures ===
+Top-5 embed:56% unembed:69% tuned_neurons:500
+  [1/7] grokking_curve.png
+  [2/7] fourier_spectrum.png
+  [3/7] embedding_fourier_heatmap.png
+  [4/7] mlp_neuron_fourier.png
+  [5/7] fourier_circles.png
+  [6/7] algorithm_summary.png
+  [7/7] logit_fourier_analysis.png
+
+=== All done! Check outputs/ ===
+  01_grokking_curve.png                    211.0 kB
+  02_fourier_spectrum.png                  93.8 kB
+  03_embedding_fourier_heatmap.png         214.4 kB
+  04_mlp_neuron_fourier.png                111.3 kB
+  05_fourier_circles.png                   1107.3 kB
+  06_algorithm_summary.png                 275.0 kB
+  07_logit_fourier_analysis.png            597.5 kB
+  config.json                              0.2 kB
+  history.json                             12.8 kB
+  model.pt                                 892.7 kB

@@ -1,0 +1,1 @@
+{"p": 113, "equation": "a + b", "frac_train": 0.3, "d_model": 128, "n_heads": 4, "d_head": 32, "d_mlp": 512, "n_layers": 1, "lr": 0.001, "wd": 1.0, "n_params": 227328}
