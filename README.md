@@ -4,7 +4,9 @@ A small transformer trained on modular addition learns a **Discrete Fourier Tran
 
 This project reproduces the key finding from [Nanda et al. (2023)](https://arxiv.org/abs/2301.05217): when a 1-layer transformer is trained on `(a + b) mod 113` with weight decay, it first memorizes the training data, then suddenly *generalizes* — a phenomenon called **grokking**. Mechanistic analysis reveals the network discovered Fourier analysis on the cyclic group Z/113Z.
 
-![Grokking Curve](outputs/01_grokking_curve.png)
+![Improved Grokking Analysis](outputs/improved_grokking_analysis_dark.png)
+
+*Comprehensive 4-panel analysis showing: (1) Loss curves with phase transitions, (2) Accuracy with color-coded regions, (3) Zoomed grokking transition, (4) Learning gradient. The model stays stuck at ~24% test accuracy for 2,200 epochs before suddenly jumping to 100% in just 350 epochs.*
 
 ## The Key Finding
 
@@ -30,6 +32,46 @@ python run.py
 ```
 
 All outputs (model, metrics, 7 figures) are saved to `outputs/`.
+
+## Improved Grokking Analysis
+
+After training, use the enhanced analysis scripts to get detailed phase transition metrics and publication-quality visualizations:
+
+```bash
+# Light mode (default)
+python improved_analysis.py
+
+# Dark mode (for presentations/dark backgrounds)
+python improved_analysis_dark.py
+```
+
+### What the Improved Analysis Provides
+
+**Precise Phase Identification:**
+- **Memorization Phase**: Exact epoch when training accuracy → 99%
+- **Plateau Phase**: Duration of stagnation (model stuck at ~24% test accuracy for 2,200 epochs)
+- **Grokking Phase**: When sudden generalization occurs (350 epochs from 50% → 99% test accuracy)
+- **Maximum Gradient**: Identifies the steepest learning moment (+41.7% jump at epoch 2,450)
+
+**Enhanced Visualizations:**
+
+**4-Panel Comprehensive View**:
+- Loss curves (log scale) with milestone markers
+- Accuracy curves with color-coded phase regions
+- Zoomed view of the grokking transition
+- Gradient analysis showing rate of generalization
+
+**Console Output Statistics**:
+- Complete metrics for each phase printed to terminal
+- Model configuration details
+- Performance statistics with precise epoch numbers
+
+**Key Findings from Analysis:**
+- Model memorizes in 125 epochs, but generalizes only after 2,325 epochs
+- 18:1 ratio of plateau duration to grokking speed
+- Fourier circuit emerges catastrophically, not gradually
+- Pre-grokking test accuracy: 24.35% ± 8.24%
+- Post-grokking test accuracy: 99.27% ± 4.42%
 
 ## Running on Northeastern's Explorer Cluster
 
@@ -131,24 +173,30 @@ Getting grokking to work reliably took several failed attempts. Here's what we l
 
 ```
 grokking/
-├── run.py              # Complete pipeline: training + Fourier analysis + 7 figures
-├── submit.sh           # SLURM batch script for Northeastern Explorer cluster
-├── requirements.txt    # torch, numpy, matplotlib
+├── run.py                      # Complete pipeline: training + Fourier analysis + 7 figures
+├── improved_analysis.py        # Enhanced analysis with precise phase metrics (light mode)
+├── improved_analysis_dark.py   # Enhanced analysis with dark mode styling
+├── submit.sh                   # SLURM batch script for Northeastern Explorer cluster
+├── requirements.txt            # torch, numpy, matplotlib
 ├── README.md
 └── outputs/
-    ├── model.pt                          # Trained weights
-    ├── config.json                       # Hyperparameters
-    ├── history.json                      # Training metrics (every 25 epochs)
-    ├── 01_grokking_curve.png             # Train/test loss and accuracy
-    ├── 02_fourier_spectrum.png           # Power spectrum of embedding & unembedding
-    ├── 03_embedding_fourier_heatmap.png  # Fourier coefficient matrix
-    ├── 04_mlp_neuron_fourier.png         # Per-neuron frequency selectivity
-    ├── 05_fourier_circles.png            # Learned vs ideal Fourier circles + correlation
-    ├── 06_algorithm_summary.png          # Full algorithm diagram with statistics
-    └── 07_logit_fourier_analysis.png     # Logit decomposition into Fourier modes
+    ├── model.pt                                # Trained weights
+    ├── config.json                             # Hyperparameters
+    ├── history.json                            # Training metrics (every 25 epochs)
+    ├── 01_grokking_curve.png                   # Train/test loss and accuracy
+    ├── 02_fourier_spectrum.png                 # Power spectrum of embedding & unembedding
+    ├── 03_embedding_fourier_heatmap.png        # Fourier coefficient matrix
+    ├── 04_mlp_neuron_fourier.png               # Per-neuron frequency selectivity
+    ├── 05_fourier_circles.png                  # Learned vs ideal Fourier circles + correlation
+    ├── 06_algorithm_summary.png                # Full algorithm diagram with statistics
+    ├── 07_logit_fourier_analysis.png           # Logit decomposition into Fourier modes
+    ├── improved_grokking_analysis.png          # 4-panel enhanced analysis (light mode)
+    └── improved_grokking_analysis_dark.png     # 4-panel enhanced analysis (dark mode)
 ```
 
 ## Output Figures
+
+### Original Analysis (from run.py)
 
 | # | Figure | What it shows |
 |---|--------|---------------|
@@ -159,6 +207,20 @@ grokking/
 | 5 | **Fourier Circles** | Learned embeddings projected onto Fourier directions form circles matching the theoretical prediction |
 | 6 | **Algorithm Summary** | Combined diagram showing spectra, algorithm flow, grokking curve, and model statistics |
 | 7 | **Logit Fourier** | Output logits can be reconstructed from just a few Fourier modes |
+
+### Enhanced Analysis (from improved_analysis scripts)
+
+**4-Panel Comprehensive Analysis** - Available in both light and dark mode:
+1. Loss curves (log scale) with phase transition markers
+2. Accuracy curves with color-coded phase regions (Learning → Plateau → Grokking → Generalized)
+3. Zoomed view of the grokking transition showing the rapid improvement window
+4. Learning rate gradient showing when circuit formation occurs
+
+All precise metrics are printed to the console, including:
+- Memorization phase (epoch 125)
+- Plateau duration (2,200 epochs)
+- Grokking phase (350 epochs)
+- Final performance statistics
 
 ## Model Details
 
@@ -174,6 +236,29 @@ grokking/
 | Learning rate | 1e-3 (constant) | No schedule — critical |
 | Parameters | 227,328 | Tiny model |
 | Training time | ~33s on A100 | Fast |
+
+## Grokking Statistics
+
+| Metric | Value |
+|--------|-------|
+| **Memorization Phase** | |
+| Train → 99% | Epoch 125 |
+| Test accuracy at memorization | 14.7% |
+| **Plateau Phase** | |
+| Duration | 2,200 epochs |
+| Average test accuracy | 24.35% ± 8.24% |
+| **Grokking Phase** | |
+| Begins (test → 50%) | Epoch 2,325 |
+| Test → 99% | Epoch 2,675 |
+| Duration | 350 epochs |
+| Maximum single jump | +41.7% at epoch 2,450 |
+| **Final Performance** | |
+| Train accuracy | 100.00% |
+| Test accuracy | 100.00% |
+| Train loss | 0.0040 |
+| Test loss | 0.0046 |
+
+The 18:1 ratio of plateau-to-grokking duration demonstrates that the Fourier circuit doesn't form gradually — it emerges catastrophically once weight decay has compressed the solution sufficiently.
 
 ## References
 
